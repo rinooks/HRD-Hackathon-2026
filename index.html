@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HRD Hackathon 2026 - 기업교육AI스터디</title>
+    
+    <!-- Pretendard Font -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Config -->
     <script>
       tailwind.config = {
         theme: {
@@ -14,10 +23,6 @@
               background: '#050505',
               primary: '#ef4444',
               secondary: '#b91c1c',
-              glass: {
-                bg: 'rgba(255, 255, 255, 0.03)',
-                border: 'rgba(255, 255, 255, 0.08)',
-              }
             },
             fontFamily: {
               sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
@@ -37,10 +42,6 @@
                 '0%': { backgroundPosition: '-1000px 0' },
                 '100%': { backgroundPosition: '1000px 0' }
               }
-            },
-            backgroundImage: {
-              'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-              'noise': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%221%22/%3E%3C/svg%3E')",
             }
           }
         }
@@ -63,46 +64,1071 @@
         opacity: 0.03;
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
       }
+      html { scroll-behavior: smooth; }
+      ::selection { background: rgba(239, 68, 68, 0.3); color: white; }
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: #050505; }
+      ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: #ef4444; }
+
+      /* GlassCard Utility Class */
+      .glass-card {
+        position: relative;
+        overflow: hidden;
+        background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.5);
+        transition: all 0.5s ease-out;
+      }
+      .glass-card-hover:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+        background-color: rgba(255, 255, 255, 0.06);
+        box-shadow: 0 0 40px -10px rgba(239,68,68,0.3);
+        transform: translateY(-4px);
+      }
       
-      /* Smooth Scrolling */
-      html {
-        scroll-behavior: smooth;
+      /* Accordion styles */
+      .faq-content {
+        transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
       }
-
-      /* Custom selection color */
-      ::selection {
-        background: rgba(239, 68, 68, 0.3);
-        color: white;
-      }
-
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 6px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #050505;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #333;
-        border-radius: 3px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #ef4444;
+      .faq-content.open {
+        max-height: 500px; /* Arbitrary large height */
+        opacity: 1;
+        padding-bottom: 1.5rem;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
-  }
-}
-</script>
 </head>
-  <body>
+<body>
     <div class="bg-noise"></div>
-    <div id="root"></div>
-  </body>
+
+    <!-- Aurora Background -->
+    <div class="fixed inset-0 -z-20 overflow-hidden pointer-events-none bg-[#030303]">
+        <div class="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a0a] to-[#050505] opacity-90"></div>
+        <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-red-600/20 rounded-full blur-[120px] animate-float-slow mix-blend-screen"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-rose-900/20 rounded-full blur-[100px] animate-float-delayed mix-blend-screen"></div>
+        <div class="absolute top-[20%] left-[30%] w-[30vw] h-[30vw] bg-indigo-900/10 rounded-full blur-[80px] animate-pulse-slow opacity-40 mix-blend-color-dodge"></div>
+        <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
+    </div>
+
+    <!-- Header -->
+    <header id="main-header" class="fixed top-0 w-full z-50 transition-all duration-300 py-6 bg-transparent">
+        <div class="container mx-auto px-6 flex justify-between items-center max-w-[1200px]">
+            <div class="flex items-center gap-3">
+                <span class="font-extrabold text-xl tracking-tighter text-white">
+                    HRD Hackathon <span class="bg-gradient-to-br from-red-500 to-[#b91c1c] bg-clip-text text-transparent">2026</span>
+                </span>
+                <span class="hidden sm:inline-block text-xs bg-white/10 px-2 py-1 rounded text-gray-400">
+                    by 기업교육AI스터디
+                </span>
+            </div>
+            <button onclick="openModal()" class="text-white px-6 py-2.5 rounded-full border border-white/30 font-semibold text-sm hover:bg-white/10 hover:border-white transition-all duration-300">
+                신청하기
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="relative min-h-screen flex items-center justify-center pt-32 pb-20 overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <div class="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-overlay" style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80')"></div>
+                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-900/20 via-[#050505]/80 to-[#050505]"></div>
+            </div>
+            <div class="container mx-auto px-6 relative z-10 max-w-[1200px] text-center">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-red-400"></i>
+                    <span class="text-sm font-medium text-red-200 tracking-wide">Team Only • Limited Spots</span>
+                </div>
+                <h1 class="text-6xl md:text-8xl font-black leading-[0.95] tracking-tighter mb-8 text-white">
+                    상상하던 <span class="text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-gray-500">HRD 도구</span>,<br />
+                    <span class="relative inline-block">
+                        <span class="absolute -inset-2 bg-red-600/20 blur-xl rounded-full"></span>
+                        <span class="relative text-red-500">현실이 되다.</span>
+                    </span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-400 mb-12 font-light max-w-3xl mx-auto leading-relaxed">
+                    기획<span class="text-zinc-600 mx-2">|</span>Design Thinking 부터 
+                    배포<span class="text-zinc-600 mx-2">|</span>Cloud Deploy 까지<br class="hidden md:block"/>
+                    <span class="text-white font-medium">1박 2일의 AI 솔루션 개발 여정</span>
+                </p>
+                <div>
+                    <button onclick="openModal()" class="group relative inline-flex items-center gap-3 px-10 py-5 bg-red-600 text-white rounded-full text-lg font-bold overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_-10px_rgba(239,68,68,0.6)]">
+                        <div class="absolute top-0 left-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer skew-x-12"></div>
+                        <span>참가 신청하기</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                    <p class="mt-4 text-sm text-gray-500 font-medium tracking-wide">신청 마감: 2026.01.31 까지</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Now Section -->
+        <section class="py-32 relative overflow-hidden">
+            <div class="absolute inset-0 z-0 pointer-events-none">
+                <div class="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-overlay" style="background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80')"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-[#050505] via-[#050505]/95 to-[#050505]"></div>
+            </div>
+            <div class="absolute top-1/4 right-0 w-[800px] h-[800px] bg-red-900/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+
+            <div class="container mx-auto px-6 relative z-10 max-w-[1200px]">
+                <div class="mb-20 text-center">
+                    <h2 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight text-white">
+                        Why <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-400 to-rose-600 drop-shadow-lg">Now?</span>
+                    </h2>
+                    <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-normal leading-relaxed text-balance">
+                        단순한 교육 운영과 강의를 넘어, HRD Product Maker로 도약할 시간
+                    </p>
+                    <div class="h-1 w-20 bg-gradient-to-r from-red-600 to-transparent rounded-full mt-6 mx-auto"></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-32">
+                    <div class="space-y-10">
+                        <h3 class="text-4xl md:text-5xl font-bold leading-tight tracking-tight text-white">
+                            <span class="text-red-500 inline-block border-b-4 border-red-500/30 pb-2 mb-2">머릿속 아이디어</span>를<br />
+                            현실로 꺼낼 수 있다면?
+                        </h3>
+                        <div class="space-y-8">
+                            <div class="group flex gap-6">
+                                <div class="mt-1 w-12 h-12 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center flex-shrink-0 group-hover:border-red-500/50 group-hover:bg-red-500/10 transition-colors duration-300">
+                                    <span class="text-lg font-bold text-zinc-500 group-hover:text-red-500 transition-colors">01</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold text-white mb-2">Pain Point</h4>
+                                    <p class="text-gray-400 leading-relaxed">"반복되는 엑셀 작업, 끝없는 강의안 수정..."<br/>담당자의 운영 효율과 강사의 교육 효과, 누구보다 깊게 고민하는 건 바로 당신입니다.</p>
+                                </div>
+                            </div>
+                            <div class="group flex gap-6">
+                                <div class="mt-1 w-12 h-12 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center flex-shrink-0 group-hover:border-red-500/50 group-hover:bg-red-500/10 transition-colors duration-300">
+                                    <span class="text-lg font-bold text-zinc-500 group-hover:text-red-500 transition-colors">02</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold text-white mb-2">Solution: Vibe Coding</h4>
+                                    <p class="text-gray-400 leading-relaxed">개발 지식이 없어서 포기하셨나요? 이제 <strong className="text-white">자연어(Natural Language)</strong>가 곧 코드가 됩니다. Google AI Studio로 당신의 기획이 즉시 앱이 됩니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                         <div class="glass-card relative z-10 p-0 overflow-hidden transform rotate-2 hover:rotate-0 transition-transform duration-700 border-white/10">
+                            <div class="bg-[#1e1e1e] p-4 border-b border-white/5 flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                <div class="ml-4 px-3 py-1 bg-black/50 rounded text-xs text-gray-500 font-mono">app.tsx</div>
+                            </div>
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=1000" alt="Coding screen" class="w-full h-auto opacity-60 grayscale mix-blend-luminosity hover:grayscale-0 transition-all duration-500" />
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#1e1e1e] to-transparent"></div>
+                                <div class="absolute bottom-8 left-8 right-8">
+                                    <div class="bg-black/80 backdrop-blur-xl border border-white/10 p-6 rounded-2xl shadow-2xl">
+                                         <div class="flex items-center gap-3 mb-3">
+                                            <i data-lucide="code-2" class="w-5 h-5 text-red-500"></i>
+                                            <span class="text-xs text-red-400 font-mono tracking-wider font-bold">AI PROMPT</span>
+                                        </div>
+                                         <p class="text-sm font-mono text-gray-300">"Create a dark-themed dashboard for HR analytics. Include a chart for employee satisfaction."</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute -inset-4 bg-gradient-to-tr from-red-600 to-transparent opacity-20 blur-2xl -z-10 rounded-[30px]"></div>
+                    </div>
+                </div>
+
+                <div class="space-y-16">
+                    <div class="text-center">
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold uppercase tracking-widest mb-6">
+                            <i data-lucide="sparkles" class="w-3 h-3"></i>
+                            Actual Outcomes
+                        </div>
+                        <h3 class="text-3xl md:text-5xl font-bold mb-6 text-white">만들게 될 <span class="text-red-500">서비스 예시</span></h3>
+                        <p class="text-gray-400 max-w-2xl mx-auto text-lg">이론이 아닙니다. 실제 배포 가능한 웹 애플리케이션입니다.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Card 1 -->
+                        <div class="glass-card glass-card-hover group relative h-full flex flex-col p-0 border-white/5 hover:border-red-500/30">
+                            <div class="h-48 bg-zinc-900/50 relative overflow-hidden group-hover:h-56 transition-all duration-500">
+                                <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=800" alt="Onboarding" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" />
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#111] to-transparent"></div>
+                                <div class="absolute top-4 left-4">
+                                    <span class="w-10 h-10 rounded-full bg-black/50 backdrop-blur border border-white/10 flex items-center justify-center">
+                                        <i data-lucide="bot" class="w-5 h-5 text-white"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="p-8 flex-1 flex flex-col relative bg-[#111]">
+                                <h4 class="text-xl font-bold mb-3 text-white flex items-center justify-between">
+                                    Onboarding Mate
+                                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-gray-600 group-hover:text-red-500 transition-colors"></i>
+                                </h4>
+                                <p class="text-gray-400 text-sm mb-6 flex-1 leading-relaxed border-t border-white/5 pt-4">"연차 규정이 뭐죠?" 반복되는 질문은 그만. 사내 규정 문서를 학습하여 신규 입사자에게 24시간 답변해주는 AI 멘토</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-[10px] bg-zinc-800 px-2 py-1 rounded text-zinc-400 font-medium">#RAG</span>
+                                    <span class="text-[10px] bg-zinc-800 px-2 py-1 rounded text-zinc-400 font-medium">#Chatbot</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="glass-card glass-card-hover group relative h-full flex flex-col p-0 border-white/5 hover:border-red-500/30">
+                            <div class="h-48 bg-zinc-900/50 relative overflow-hidden group-hover:h-56 transition-all duration-500">
+                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800" alt="Analytics" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" />
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#111] to-transparent"></div>
+                                <div class="absolute top-4 left-4">
+                                    <span class="w-10 h-10 rounded-full bg-black/50 backdrop-blur border border-white/10 flex items-center justify-center">
+                                        <i data-lucide="bar-chart-3" class="w-5 h-5 text-white"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="p-8 flex-1 flex flex-col relative bg-[#111]">
+                                <h4 class="text-xl font-bold mb-3 text-white flex items-center justify-between">
+                                    Edu-Insight Board
+                                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-gray-600 group-hover:text-red-500 transition-colors"></i>
+                                </h4>
+                                <p class="text-gray-400 text-sm mb-6 flex-1 leading-relaxed border-t border-white/5 pt-4">수천 건의 강의 만족도 서술형 응답을 AI가 감성 분석. 키워드와 개선점을 자동으로 추출하여 시각화하는 대시보드</p>
+                                <div class="flex flex-wrap gap-2">
+                                     <span class="text-[10px] bg-zinc-800 px-2 py-1 rounded text-zinc-400 font-medium">#Analytics</span>
+                                    <span class="text-[10px] bg-zinc-800 px-2 py-1 rounded text-zinc-400 font-medium">#Dashboard</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="glass-card glass-card-hover group relative h-full flex flex-col p-0 border-white/5 hover:border-red-500/30">
+                            <div class="h-48 bg-zinc-900/50 relative overflow-hidden group-hover:h-56 transition-all duration-500">
+                                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800" alt="Mentoring" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" />
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#111] to-transparent"></div>
+                                 <div class="absolute top-4 left-4">
+                                    <span class="w-10 h-10 rounded-full bg-black/50 backdrop-blur border border-white/10 flex items-center justify-center">
+                                        <i data-lucide="users" class="w-5 h-5 text-white"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="p-8 flex-1 flex flex-col relative bg-[#111]">
+                                <h4 class="text-xl font-bold mb-3 text-white flex items-center justify-between">
+                                    Role-Play Coach
+                                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-gray-600 group-hover:text-red-500 transition-colors"></i>
+                                </h4>
+                                <p class="text-gray-400 text-sm mb-6 flex-1 leading-relaxed border-t border-white/5 pt-4">CS/세일즈 교육을 위한 AI 페르소나 롤플레잉. 실제 음성 대화로 실습하고, 즉각적인 피드백 리포트를 제공</p>
+                                 <div class="flex flex-wrap gap-2">
+                                     <span class="text-[10px] bg-zinc-800 px-2 py-1 rounded text-zinc-400 font-medium">#Voice_AI</span>
+                                    <span class="text-[10px] bg-zinc-800 px-2 py-1 rounded text-zinc-400 font-medium">#Coaching</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section class="py-32 relative">
+             <div class="absolute inset-0 z-0 pointer-events-none">
+                <div class="absolute inset-0 bg-cover bg-center opacity-10" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80')"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-[#050505] via-[#050505]/80 to-[#050505]"></div>
+            </div>
+
+            <div class="container mx-auto px-6 relative z-10 max-w-[1200px]">
+                <div class="mb-20 text-center">
+                    <h2 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight text-white">
+                        참가 <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-400 to-rose-600 drop-shadow-lg">혜택</span>
+                    </h2>
+                    <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-normal leading-relaxed text-balance">
+                        단 이틀의 몰입으로 가져갈 수 있는 확실한 결과물
+                    </p>
+                    <div class="h-1 w-20 bg-gradient-to-r from-red-600 to-transparent rounded-full mt-6 mx-auto"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                     <!-- Benefit 1 -->
+                    <div class="glass-card p-10 text-left h-full relative group hover:bg-zinc-900/60">
+                        <span class="absolute -top-4 -right-4 text-[120px] font-black text-white/[0.02] group-hover:text-red-500/[0.05] transition-colors select-none leading-none">01</span>
+                        <div class="w-16 h-16 bg-gradient-to-br from-red-600 to-red-900 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-red-900/30 group-hover:scale-110 transition-transform duration-300 relative z-10">
+                            <i data-lucide="rocket" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white relative z-10">나만의 AI 서비스 보유</h3>
+                        <p class="text-gray-400 leading-relaxed relative z-10">로컬 파일이 아닙니다. Google Cloud Run으로 실제 서버에 배포된, 전 세계 어디서나 접속 가능한 나만의 웹 앱 URL을 갖게 됩니다.</p>
+                    </div>
+                     <!-- Benefit 2 -->
+                     <div class="glass-card p-10 text-left h-full relative group hover:bg-zinc-900/60">
+                        <span class="absolute -top-4 -right-4 text-[120px] font-black text-white/[0.02] group-hover:text-red-500/[0.05] transition-colors select-none leading-none">02</span>
+                        <div class="w-16 h-16 bg-gradient-to-br from-red-600 to-red-900 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-red-900/30 group-hover:scale-110 transition-transform duration-300 relative z-10">
+                            <i data-lucide="graduation-cap" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white relative z-10">실무형 Vibe Coding 역량</h3>
+                        <p class="text-gray-400 leading-relaxed relative z-10">복잡한 코딩 문법 대신, 자연어로 개발하는 Google AI Studio 활용법을 마스터합니다. 이제 아이디어만 있으면 무엇이든 만들 수 있습니다.</p>
+                    </div>
+                     <!-- Benefit 3 -->
+                     <div class="glass-card p-10 text-left h-full relative group hover:bg-zinc-900/60">
+                        <span class="absolute -top-4 -right-4 text-[120px] font-black text-white/[0.02] group-hover:text-red-500/[0.05] transition-colors select-none leading-none">03</span>
+                        <div class="w-16 h-16 bg-gradient-to-br from-red-600 to-red-900 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-red-900/30 group-hover:scale-110 transition-transform duration-300 relative z-10">
+                            <i data-lucide="handshake" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white relative z-10">강력한 HRD 네트워크</h3>
+                        <p class="text-gray-400 leading-relaxed relative z-10">변화를 주도하는 전국의 열정적인 HRD 담당자, 전문 강사들과 함께 밤을 새우며 기업교육AI스터디의 끈끈한 동료가 됩니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section class="py-24 relative" id="timeline">
+            <div class="absolute inset-0 z-0 pointer-events-none">
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=2068&auto=format&fit=crop')] bg-cover bg-center opacity-5 mix-blend-screen"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-[#050505] via-[#050505]/90 to-[#050505]"></div>
+            </div>
+
+            <div class="container mx-auto px-6 relative z-10 max-w-[1200px]">
+                <div class="mb-20 text-center">
+                    <h2 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight text-white">
+                        프로그램 <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-400 to-rose-600 drop-shadow-lg">일정</span>
+                    </h2>
+                    <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-normal leading-relaxed text-balance">
+                        기획은 탄탄하게, 개발은 거침없이
+                    </p>
+                    <div class="h-1 w-20 bg-gradient-to-r from-red-600 to-transparent rounded-full mt-6 mx-auto"></div>
+                </div>
+                
+                <div class="relative max-w-4xl mx-auto">
+                    <div class="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-white/10 md:-translate-x-1/2"></div>
+
+                    <!-- Day 1 -->
+                    <div class="relative flex flex-col md:flex-row justify-between items-start mb-16 md:mb-24">
+                        <div class="absolute left-6 md:left-1/2 w-4 h-4 bg-[#050505] border-[3px] border-red-500 rounded-full z-10 -translate-x-1/2 mt-6"></div>
+                        <div class="w-full md:w-[45%] pl-14 md:pl-0 md:text-right md:pr-10 pt-4 mb-4 md:mb-0">
+                            <h3 class="text-2xl font-bold text-white">Day 1</h3>
+                            <span class="text-red-500 font-semibold block mt-1">2026.02.06 (금)</span>
+                            <p class="text-sm text-gray-500 mt-1">Online Zoom (3H)</p>
+                        </div>
+                        <div class="w-full md:w-[45%] pl-14 md:pl-10">
+                            <div class="glass-card p-8">
+                                <h4 class="text-xl font-bold mb-4 text-white">기획 & 기본기 (Planning & Basics)</h4>
+                                <ul class="space-y-3 text-gray-300">
+                                    <li class="relative pl-4 before:content-['•'] before:absolute before:left-0 before:text-red-500">
+                                        <span class="font-semibold text-white mr-2">14:00</span> 
+                                        <strong>Kick-off & Design Thinking</strong>
+                                        <div class="text-sm text-gray-500 mt-1">교육 현장의 진짜 문제를 정의하고 솔루션을 도출합니다.</div>
+                                    </li>
+                                    <li class="relative pl-4 before:content-['•'] before:absolute before:left-0 before:text-red-500">
+                                        <span class="font-semibold text-white mr-2">15:00</span> 
+                                        <strong>Vibe Coding 입문</strong>
+                                        <div class="text-sm text-gray-500 mt-1">Google AI Studio 사용법 및 시스템 프롬프트 작성법 학습</div>
+                                    </li>
+                                    <li class="relative pl-4 before:content-['•'] before:absolute before:left-0 before:text-red-500">
+                                        <span class="font-semibold text-white mr-2">16:50</span> 
+                                        <strong>Closing</strong>
+                                        <div class="text-sm text-gray-500 mt-1">팀 빌딩 안내 및 Day 2 준비물 체크</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Day 2 -->
+                    <div class="relative flex flex-col md:flex-row-reverse justify-between items-start">
+                        <div class="absolute left-6 md:left-1/2 w-4 h-4 bg-[#050505] border-[3px] border-red-500 rounded-full z-10 -translate-x-1/2 mt-6"></div>
+                        <div class="w-full md:w-[45%] pl-14 md:pl-10 pt-4 mb-4 md:mb-0">
+                            <h3 class="text-2xl font-bold text-white">Day 2</h3>
+                            <span class="text-red-500 font-semibold block mt-1">2026.02.07 (토)</span>
+                            <p class="text-sm text-gray-500 mt-1">Offline 교육장 (11H)</p>
+                        </div>
+                        <div class="w-full md:w-[45%] pl-14 md:pl-0 md:pr-10">
+                            <div class="glass-card p-8">
+                                <h4 class="text-xl font-bold mb-4 text-white">빌드 & 배포 (Build & Deploy)</h4>
+                                <ul class="space-y-3 text-gray-300">
+                                    <li class="relative pl-4 before:content-['•'] before:absolute before:left-0 before:text-red-500">
+                                        <span class="font-semibold text-white mr-2">09:00</span> 
+                                        <strong>Opening & Team Building</strong>
+                                    </li>
+                                    <li class="relative pl-4 before:content-['•'] before:absolute before:left-0 before:text-red-500">
+                                        <span class="font-semibold text-white mr-2">10:00</span> 
+                                        <strong>Sprint 1: Core Logic</strong>
+                                        <div class="text-sm text-gray-500 mt-1">핵심 기능 구현 및 AI 디버깅 (멘토 밀착 지원)</div>
+                                    </li>
+                                    <li class="relative pl-4 before:content-['•'] before:absolute before:left-0 before:text-red-500">
+                                        <span class="font-semibold text-red-400 italic mr-2">12:30</span> 
+                                        <span class="text-red-400 italic">Lunch & Networking</span>
+                                    </li>
+                                    <li class="relative pl-4 before:content-['•'] before:absolute before:left-0 before:text-red-500">
+                                        <span class="font-semibold text-white mr-2">13:30</span> 
+                                        <strong>Sprint 2: UI/UX Styling</strong>
+                                        <div class="text-sm text-gray-500 mt-1">최신 HRD 디자인 시스템(Glassmorphism) 적용</div>
+                                    </li>
+                                    <li class="relative pl-4 before:content-['•'] before:absolute before:left-0 before:text-red-500">
+                                        <span class="font-semibold text-white mr-2">16:30</span> 
+                                        <strong>Sprint 3: Cloud Deploy</strong>
+                                        <div class="text-sm text-gray-500 mt-1">Cloud Run 컨테이너 배포 및 도메인 접속 테스트</div>
+                                    </li>
+                                    <li class="relative pl-4 before:content-['•'] before:absolute before:left-0 before:text-red-500">
+                                        <span class="font-semibold text-white mr-2">18:30</span> 
+                                        <strong>Demo Day & Awards</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mentors Section -->
+        <section class="py-24 relative bg-black" id="mentors">
+            <div class="absolute inset-0 z-0 pointer-events-none">
+                <div class="absolute inset-0 bg-cover bg-center opacity-10" style="background-image: url('https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80')"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-[#050505] via-[#050505]/95 to-[#050505]"></div>
+            </div>
+
+            <div class="container mx-auto px-6 relative z-10 max-w-[1200px]">
+                <div class="mb-20 text-center">
+                    <h2 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight text-white">
+                        전문가 <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-400 to-rose-600 drop-shadow-lg">멘토진</span>
+                    </h2>
+                    <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-normal leading-relaxed text-balance">
+                        당신의 아이디어를 실현시켜줄 8인의 전문가 그룹
+                    </p>
+                    <div class="h-1 w-20 bg-gradient-to-r from-red-600 to-transparent rounded-full mt-6 mx-auto"></div>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Mentors will be inserted here, for brevity simply copying one template and repeating with JS or manual HTML -->
+                     <!-- Mentor 1 -->
+                    <div class="glass-card p-6 text-center flex flex-col items-center group border-white/5 hover:border-red-500/50 hover:bg-zinc-900/80">
+                        <div class="w-24 h-24 rounded-full p-1 mb-5 relative group-hover:scale-110 transition-transform duration-300 mx-auto">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-red-500 to-transparent opacity-50 blur-md group-hover:opacity-100 transition-opacity"></div>
+                            <div class="w-full h-full rounded-full overflow-hidden relative z-10 bg-zinc-800 border-2 border-zinc-700 group-hover:border-red-500 transition-colors">
+                                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4" alt="원운식" class="w-full h-full object-cover"/>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1 text-white group-hover:text-red-500 transition-colors">원운식</h3>
+                        <p class="text-red-500 font-semibold text-xs uppercase tracking-wider mb-3 bg-red-500/10 px-2 py-1 rounded">AI Tech Lead</p>
+                        <p class="text-gray-400 text-sm leading-snug">Gemini 프롬프트 엔지니어링 마스터</p>
+                    </div>
+                     <!-- Mentor 2 -->
+                    <div class="glass-card p-6 text-center flex flex-col items-center group border-white/5 hover:border-red-500/50 hover:bg-zinc-900/80">
+                        <div class="w-24 h-24 rounded-full p-1 mb-5 relative group-hover:scale-110 transition-transform duration-300 mx-auto">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-red-500 to-transparent opacity-50 blur-md group-hover:opacity-100 transition-opacity"></div>
+                            <div class="w-full h-full rounded-full overflow-hidden relative z-10 bg-zinc-800 border-2 border-zinc-700 group-hover:border-red-500 transition-colors">
+                                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Aneka&backgroundColor=c0aede" alt="김관주" class="w-full h-full object-cover"/>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1 text-white group-hover:text-red-500 transition-colors">김관주</h3>
+                        <p class="text-red-500 font-semibold text-xs uppercase tracking-wider mb-3 bg-red-500/10 px-2 py-1 rounded">Product Designer</p>
+                        <p class="text-gray-400 text-sm leading-snug">사용자를 홀리는 UI/UX 디자인</p>
+                    </div>
+                    <!-- Mentor 3 -->
+                    <div class="glass-card p-6 text-center flex flex-col items-center group border-white/5 hover:border-red-500/50 hover:bg-zinc-900/80">
+                        <div class="w-24 h-24 rounded-full p-1 mb-5 relative group-hover:scale-110 transition-transform duration-300 mx-auto">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-red-500 to-transparent opacity-50 blur-md group-hover:opacity-100 transition-opacity"></div>
+                            <div class="w-full h-full rounded-full overflow-hidden relative z-10 bg-zinc-800 border-2 border-zinc-700 group-hover:border-red-500 transition-colors">
+                                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=James&backgroundColor=ffdfbf" alt="최송일" class="w-full h-full object-cover"/>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1 text-white group-hover:text-red-500 transition-colors">최송일</h3>
+                        <p class="text-red-500 font-semibold text-xs uppercase tracking-wider mb-3 bg-red-500/10 px-2 py-1 rounded">Full Stack Dev</p>
+                        <p class="text-gray-400 text-sm leading-snug">아이디어를 코드로 실현하는 빌더</p>
+                    </div>
+                    <!-- Mentor 4 -->
+                    <div class="glass-card p-6 text-center flex flex-col items-center group border-white/5 hover:border-red-500/50 hover:bg-zinc-900/80">
+                        <div class="w-24 h-24 rounded-full p-1 mb-5 relative group-hover:scale-110 transition-transform duration-300 mx-auto">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-red-500 to-transparent opacity-50 blur-md group-hover:opacity-100 transition-opacity"></div>
+                            <div class="w-full h-full rounded-full overflow-hidden relative z-10 bg-zinc-800 border-2 border-zinc-700 group-hover:border-red-500 transition-colors">
+                                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Maria&backgroundColor=ffdfbf" alt="임정훈" class="w-full h-full object-cover"/>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1 text-white group-hover:text-red-500 transition-colors">임정훈</h3>
+                        <p class="text-red-500 font-semibold text-xs uppercase tracking-wider mb-3 bg-red-500/10 px-2 py-1 rounded">HRD Consultant</p>
+                        <p class="text-gray-400 text-sm leading-snug">교육공학 기반의 서비스 기획</p>
+                    </div>
+                    <!-- Mentor 5 -->
+                     <div class="glass-card p-6 text-center flex flex-col items-center group border-white/5 hover:border-red-500/50 hover:bg-zinc-900/80">
+                        <div class="w-24 h-24 rounded-full p-1 mb-5 relative group-hover:scale-110 transition-transform duration-300 mx-auto">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-red-500 to-transparent opacity-50 blur-md group-hover:opacity-100 transition-opacity"></div>
+                            <div class="w-full h-full rounded-full overflow-hidden relative z-10 bg-zinc-800 border-2 border-zinc-700 group-hover:border-red-500 transition-colors">
+                                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Brian&backgroundColor=b6e3f4" alt="김민주" class="w-full h-full object-cover"/>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1 text-white group-hover:text-red-500 transition-colors">김민주</h3>
+                        <p class="text-red-500 font-semibold text-xs uppercase tracking-wider mb-3 bg-red-500/10 px-2 py-1 rounded">Cloud Architect</p>
+                        <p class="text-gray-400 text-sm leading-snug">안정적인 서버 배포와 운영</p>
+                    </div>
+                     <!-- Mentor 6 -->
+                     <div class="glass-card p-6 text-center flex flex-col items-center group border-white/5 hover:border-red-500/50 hover:bg-zinc-900/80">
+                        <div class="w-24 h-24 rounded-full p-1 mb-5 relative group-hover:scale-110 transition-transform duration-300 mx-auto">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-red-500 to-transparent opacity-50 blur-md group-hover:opacity-100 transition-opacity"></div>
+                            <div class="w-full h-full rounded-full overflow-hidden relative z-10 bg-zinc-800 border-2 border-zinc-700 group-hover:border-red-500 transition-colors">
+                                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Julia&backgroundColor=c0aede" alt="박준형" class="w-full h-full object-cover"/>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1 text-white group-hover:text-red-500 transition-colors">박준형</h3>
+                        <p class="text-red-500 font-semibold text-xs uppercase tracking-wider mb-3 bg-red-500/10 px-2 py-1 rounded">Service Planner</p>
+                        <p class="text-gray-400 text-sm leading-snug">비즈니스 임팩트를 만드는 기획</p>
+                    </div>
+                     <!-- Mentor 7 -->
+                     <div class="glass-card p-6 text-center flex flex-col items-center group border-white/5 hover:border-red-500/50 hover:bg-zinc-900/80">
+                        <div class="w-24 h-24 rounded-full p-1 mb-5 relative group-hover:scale-110 transition-transform duration-300 mx-auto">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-red-500 to-transparent opacity-50 blur-md group-hover:opacity-100 transition-opacity"></div>
+                            <div class="w-full h-full rounded-full overflow-hidden relative z-10 bg-zinc-800 border-2 border-zinc-700 group-hover:border-red-500 transition-colors">
+                                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Robert&backgroundColor=ffdfbf" alt="존킴" class="w-full h-full object-cover"/>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1 text-white group-hover:text-red-500 transition-colors">존킴</h3>
+                        <p class="text-red-500 font-semibold text-xs uppercase tracking-wider mb-3 bg-red-500/10 px-2 py-1 rounded">Frontend Dev</p>
+                        <p class="text-gray-400 text-sm leading-snug">바이브 코딩의 정석</p>
+                    </div>
+                     <!-- Mentor 8 -->
+                     <div class="glass-card p-6 text-center flex flex-col items-center group border-white/5 hover:border-red-500/50 hover:bg-zinc-900/80">
+                        <div class="w-24 h-24 rounded-full p-1 mb-5 relative group-hover:scale-110 transition-transform duration-300 mx-auto">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-red-500 to-transparent opacity-50 blur-md group-hover:opacity-100 transition-opacity"></div>
+                            <div class="w-full h-full rounded-full overflow-hidden relative z-10 bg-zinc-800 border-2 border-zinc-700 group-hover:border-red-500 transition-colors">
+                                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Sora&backgroundColor=c0aede" alt="레이디영" class="w-full h-full object-cover"/>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1 text-white group-hover:text-red-500 transition-colors">레이디영</h3>
+                        <p class="text-red-500 font-semibold text-xs uppercase tracking-wider mb-3 bg-red-500/10 px-2 py-1 rounded">EdTech Expert</p>
+                        <p class="text-gray-400 text-sm leading-snug">에듀테크 트렌드와 인사이트</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- FAQ Section -->
+        <section class="py-24 relative" id="faq">
+            <div class="container mx-auto px-6 relative z-10 max-w-[1000px]">
+                <div class="mb-20 text-center">
+                    <h2 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight text-white">
+                        자주 묻는 <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-400 to-rose-600 drop-shadow-lg">질문</span>
+                    </h2>
+                    <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-normal leading-relaxed text-balance">
+                        궁금한 점이 있으신가요?
+                    </p>
+                    <div class="h-1 w-20 bg-gradient-to-r from-red-600 to-transparent rounded-full mt-6 mx-auto"></div>
+                </div>
+
+                <div class="glass-card p-8 md:p-12">
+                     <div class="border-b border-white/10 last:border-0">
+                        <button class="w-full py-6 flex justify-between items-center text-left focus:outline-none group" onclick="toggleFAQ(this)">
+                            <span class="text-lg md:text-xl font-semibold transition-colors text-white group-hover:text-red-400">Q. 코딩을 전혀 못해도 참가할 수 있나요?</span>
+                            <i data-lucide="chevron-down" class="w-6 h-6 text-gray-500 group-hover:text-white transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-content">
+                            <p class="text-gray-300 leading-relaxed pl-0 md:pl-4 border-l-2 border-red-500/30 ml-1">네, 물론입니다! 이번 해커톤은 전문 개발자가 아닌 HRD 담당자와 강사님들을 위한 행사입니다. Google AI Studio와 자연어 프롬프팅(Vibe Coding)을 통해 코딩 지식 없이도 앱을 만들 수 있도록 멘토들이 밀착 지원합니다.</p>
+                        </div>
+                    </div>
+                    <div class="border-b border-white/10 last:border-0">
+                        <button class="w-full py-6 flex justify-between items-center text-left focus:outline-none group" onclick="toggleFAQ(this)">
+                            <span class="text-lg md:text-xl font-semibold transition-colors text-white group-hover:text-red-400">Q. 개인으로도 참가 신청이 가능한가요?</span>
+                            <i data-lucide="chevron-down" class="w-6 h-6 text-gray-500 group-hover:text-white transition-transform duration-300"></i>
+                        </button>
+                         <div class="faq-content">
+                            <p class="text-gray-300 leading-relaxed pl-0 md:pl-4 border-l-2 border-red-500/30 ml-1">본 행사는 팀워크와 협업을 중시하므로 3~5인의 팀 단위 신청을 원칙으로 하고 있습니다. 마음이 맞는 동료나 스터디원들과 함께 팀을 이뤄 도전해보세요!</p>
+                        </div>
+                    </div>
+                    <div class="border-b border-white/10 last:border-0">
+                        <button class="w-full py-6 flex justify-between items-center text-left focus:outline-none group" onclick="toggleFAQ(this)">
+                            <span class="text-lg md:text-xl font-semibold transition-colors text-white group-hover:text-red-400">Q. 참가비용은 얼마인가요?</span>
+                            <i data-lucide="chevron-down" class="w-6 h-6 text-gray-500 group-hover:text-white transition-transform duration-300"></i>
+                        </button>
+                         <div class="faq-content">
+                            <p class="text-gray-300 leading-relaxed pl-0 md:pl-4 border-l-2 border-red-500/30 ml-1">참가비는 1인당 10만원입니다. 이는 양질의 교육 환경과 중식, 다과, 웰컴 키트 제공 등을 위한 실비로 사용됩니다. 법인카드 결제 및 증빙 서류 발급이 가능합니다.</p>
+                        </div>
+                    </div>
+                     <div class="border-b border-white/10 last:border-0">
+                        <button class="w-full py-6 flex justify-between items-center text-left focus:outline-none group" onclick="toggleFAQ(this)">
+                            <span class="text-lg md:text-xl font-semibold transition-colors text-white group-hover:text-red-400">Q. 결과물에 대한 저작권은 누구에게 있나요?</span>
+                            <i data-lucide="chevron-down" class="w-6 h-6 text-gray-500 group-hover:text-white transition-transform duration-300"></i>
+                        </button>
+                         <div class="faq-content">
+                            <p class="text-gray-300 leading-relaxed pl-0 md:pl-4 border-l-2 border-red-500/30 ml-1">모든 결과물의 지식재산권(IP)은 해당 팀에게 귀속됩니다. 단, 주최측(기업교육AI스터디)은 포트폴리오 및 행사 홍보 목적으로 결과물을 활용할 수 있습니다.</p>
+                        </div>
+                    </div>
+                     <div class="border-b border-white/10 last:border-0">
+                        <button class="w-full py-6 flex justify-between items-center text-left focus:outline-none group" onclick="toggleFAQ(this)">
+                            <span class="text-lg md:text-xl font-semibold transition-colors text-white group-hover:text-red-400">Q. 꼭 1박 2일 전체 일정을 참여해야 하나요?</span>
+                            <i data-lucide="chevron-down" class="w-6 h-6 text-gray-500 group-hover:text-white transition-transform duration-300"></i>
+                        </button>
+                         <div class="faq-content">
+                            <p class="text-gray-300 leading-relaxed pl-0 md:pl-4 border-l-2 border-red-500/30 ml-1">네, 1박 2일(Day 1 온라인 3시간, Day 2 오프라인 11시간) 과정은 연속성 있는 프로그램으로 구성되어 있어 부분 참여는 불가능합니다. 수료증 발급을 위해서도 전 일정 참여가 필수입니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Info Section -->
+        <section class="py-24 relative">
+             <div class="absolute inset-0 z-0 pointer-events-none">
+                <div class="absolute inset-0 bg-cover bg-center opacity-10" style="background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80')"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-[#050505]"></div>
+            </div>
+            
+            <div class="container mx-auto px-6 relative z-10 max-w-[1200px]">
+                <div class="mb-20 text-center">
+                    <h2 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight text-white">
+                        참가 <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-400 to-rose-600 drop-shadow-lg">안내</span>
+                    </h2>
+                    <div class="h-1 w-20 bg-gradient-to-r from-red-600 to-transparent rounded-full mt-6 mx-auto"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                     <!-- Eligibility -->
+                    <div class="glass-card p-10 h-full border-t-4 border-t-red-500">
+                        <h3 class="text-2xl font-bold mb-8 flex items-center gap-3 text-white">
+                            <span class="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 text-sm">01</span>
+                            참가 자격 요건
+                        </h3>
+                        <ul class="space-y-6">
+                            <li class="flex gap-4">
+                                <i data-lucide="check-circle-2" class="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5"></i>
+                                <div>
+                                    <span class="block font-bold text-white mb-1">대상</span>
+                                    <span class="text-gray-400">AI 기술로 교육 혁신을 꿈꾸는 <strong class="text-white">HRD 담당자</strong> 및 <strong class="text-white">기업교육 강사</strong></span>
+                                </div>
+                            </li>
+                             <li class="flex gap-4">
+                                <i data-lucide="check-circle-2" class="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5"></i>
+                                <div>
+                                    <span class="block font-bold text-white mb-1">팀 구성</span>
+                                    <span class="text-gray-400">3인 이상 ~ 5인 이하 팀 단위 신청 (필수)</span>
+                                </div>
+                            </li>
+                             <li class="flex gap-4">
+                                <i data-lucide="check-circle-2" class="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5"></i>
+                                <div>
+                                    <span class="block font-bold text-white mb-1">스킬</span>
+                                    <span class="text-gray-400">개발 지식 무관 (코딩을 몰라도 열정만 있다면 OK)</span>
+                                </div>
+                            </li>
+                             <li class="flex gap-4">
+                                <i data-lucide="check-circle-2" class="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5"></i>
+                                <div>
+                                    <span class="block font-bold text-white mb-1">준비물</span>
+                                    <span class="text-gray-400">개인 노트북, 구글 계정, 오픈 마인드</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Time & Place -->
+                     <div class="glass-card p-10 h-full border-t-4 border-t-red-500">
+                        <h3 class="text-2xl font-bold mb-8 flex items-center gap-3 text-white">
+                            <span class="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 text-sm">02</span>
+                            일시 및 장소
+                        </h3>
+                        <ul class="space-y-8">
+                             <li class="flex gap-5">
+                                <i data-lucide="calendar" class="w-6 h-6 text-zinc-500 flex-shrink-0"></i>
+                                <div>
+                                    <div class="flex items-baseline gap-3 mb-1">
+                                        <span class="font-bold text-white text-lg">Day 1</span>
+                                        <span class="text-red-500 font-medium">2026.02.06 (금)</span>
+                                    </div>
+                                    <p class="text-gray-400">14:00 ~ 17:00 @ Online Zoom</p>
+                                </div>
+                            </li>
+                            <li class="flex gap-5">
+                                <i data-lucide="map-pin" class="w-6 h-6 text-zinc-500 flex-shrink-0"></i>
+                                <div>
+                                    <div class="flex items-baseline gap-3 mb-1">
+                                        <span class="font-bold text-white text-lg">Day 2</span>
+                                        <span class="text-red-500 font-medium">2026.02.07 (토)</span>
+                                    </div>
+                                    <p class="text-gray-400">09:00 ~ 20:00 @ 오프라인 교육장 (서울)</p>
+                                </div>
+                            </li>
+                             <li class="flex gap-5 pt-4 border-t border-white/10">
+                                <i data-lucide="credit-card" class="w-6 h-6 text-zinc-500 flex-shrink-0"></i>
+                                <div>
+                                    <span class="block font-bold text-white mb-1">참가비</span>
+                                    <span class="text-xl font-bold text-red-400">1인 10만원</span>
+                                    <p class="text-sm text-gray-500 mt-1">중식 및 다과, 웰컴 키트 제공 (법인카드 가능)</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section class="py-32 relative overflow-hidden text-center">
+            <div class="absolute inset-0 z-0 pointer-events-none">
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-red-950/80 via-black/80 to-black"></div>
+            </div>
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-red-600/20 blur-[150px] rounded-full pointer-events-none z-0"></div>
+
+            <div class="container mx-auto px-6 relative z-10 max-w-[1200px]">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-5xl md:text-7xl font-black mb-8 tracking-tighter leading-tight text-white">
+                        망설이면 <span class="text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-rose-700">늦습니다.</span>
+                    </h2>
+                    <p class="text-xl md:text-3xl text-gray-400 mb-12 font-light leading-relaxed">
+                        2026년, HRD 커리어의 터닝포인트.<br />
+                        지금 바로 당신의 팀과 함께 도전하세요.
+                    </p>
+                    
+                    <button onclick="openModal()" class="group relative inline-flex items-center justify-center px-12 py-6 text-xl font-bold text-white transition-all duration-300 bg-white/5 border border-white/10 rounded-full hover:bg-red-600 hover:border-red-500 hover:scale-105 shadow-2xl">
+                        <span class="absolute inset-0 w-full h-full rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-red-600 blur-lg -z-10"></span>
+                        지금 바로 신청하기
+                        <i data-lucide="arrow-right" class="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                    <p class="mt-8 text-sm text-zinc-500 font-mono">* 선착순 마감될 수 있습니다. (Team Only)</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#020202] pt-20 pb-10 border-t border-white/5 text-gray-400 text-sm">
+        <div class="container mx-auto px-6 max-w-[1200px]">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <!-- Col 1 -->
+                <div class="md:col-span-1">
+                    <h3 class="text-white text-xl font-extrabold mb-6 flex items-center gap-2">
+                        HRD Hackathon <span class="text-red-500">2026</span>
+                    </h3>
+                    <p class="leading-relaxed mb-6 text-gray-500">
+                        기업교육 전문가(담당자/강사)를 위한<br/>
+                        국내 최초의 노코드 AI 솔루션 해커톤.<br/>
+                        우리는 기술을 통해 교육의 미래를<br/>
+                        새롭게 정의합니다.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-red-600 hover:text-white transition-all"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#0077b5] hover:text-white transition-all"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#ff0000] hover:text-white transition-all"><i data-lucide="youtube" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+                <!-- Col 2 -->
+                <div>
+                    <h4 class="text-white font-bold text-base mb-6">Quick Links</h4>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="hover:text-red-500 transition-colors">Home</a></li>
+                        <li><a href="#timeline" class="hover:text-red-500 transition-colors">Program</a></li>
+                        <li><a href="#mentors" class="hover:text-red-500 transition-colors">Mentors</a></li>
+                        <li><a href="#faq" class="hover:text-red-500 transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                <!-- Col 3 -->
+                <div>
+                    <h4 class="text-white font-bold text-base mb-6">Contact Us</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="mail" class="w-5 h-5 text-red-500 flex-shrink-0"></i>
+                            <span>support@hrd-hackathon.kr</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-red-500 flex-shrink-0"></i>
+                            <span>서울특별시 강남구 테헤란로 427,<br/>위워크 타워 12층</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Col 4 -->
+                <div>
+                    <h4 class="text-white font-bold text-base mb-6">Family Sites</h4>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="flex items-center gap-2 hover:text-red-500 transition-colors">기업교육AI스터디 <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
+                        <li><a href="#" class="flex items-center gap-2 hover:text-red-500 transition-colors">Reference HRD <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
+                        <li><a href="#" class="flex items-center gap-2 hover:text-red-500 transition-colors">HRD Insight Forum <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-zinc-600">&copy; 2026 기업교육AI스터디. All Rights Reserved.</p>
+                <div class="flex items-center gap-6">
+                    <a href="#" class="text-zinc-600 hover:text-gray-400 text-xs">Privacy Policy</a>
+                    <a href="#" class="text-zinc-600 hover:text-gray-400 text-xs">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Apply Modal -->
+    <div id="apply-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden">
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+
+        <!-- Content -->
+        <div class="relative w-full max-w-2xl bg-[#111] border border-zinc-800 rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-200 custom-scrollbar">
+            <button onclick="closeModal()" class="absolute top-5 right-5 text-gray-500 hover:text-white transition-colors p-1 z-10">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <!-- Success View (Hidden by default) -->
+            <div id="modal-success" class="hidden p-16 flex flex-col items-center justify-center text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div class="w-24 h-24 bg-green-500/10 rounded-full flex items-center justify-center mb-6">
+                    <i data-lucide="check-circle" class="w-12 h-12 text-green-500"></i>
+                </div>
+                <h2 class="text-3xl font-bold mb-4 text-white">신청이 완료되었습니다!</h2>
+                <p class="text-gray-400 mb-8 leading-relaxed">
+                    성공적으로 접수되었습니다.<br />
+                    기업교육AI스터디 담당자가 내용을 검토한 후,<br />
+                    <span class="text-white font-semibold">대표자 이메일</span>로 결과를 안내해 드리겠습니다.
+                </p>
+                <button onclick="closeModal()" class="px-8 py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-full font-bold transition-colors">
+                    닫기
+                </button>
+            </div>
+
+            <!-- Form View -->
+            <div id="modal-form-container" class="p-8 md:p-10">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold mb-2 text-white">참가 신청서</h2>
+                    <p class="text-gray-400 text-sm">기업교육AI스터디와 함께할 팀을 소개해주세요.</p>
+                </div>
+
+                <form id="apply-form" class="space-y-8">
+                    <!-- Honeypot -->
+                    <div class="hidden opacity-0 h-0 overflow-hidden">
+                        <label>Do not fill this field</label>
+                        <input type="text" name="bot_field" tabindex="-1" autocomplete="off" />
+                    </div>
+
+                    <!-- Section 1 -->
+                    <div class="space-y-4">
+                        <h4 class="text-red-500 font-bold border-b border-zinc-800 pb-2">01. 팀 정보 (Team Identity)</h4>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">팀명</label>
+                            <input type="text" name="team_name" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors" placeholder="예: 야근없는 HRD / 명강사 AI" required />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">팀 슬로건 (50자 이내)</label>
+                            <input type="text" name="team_slogan" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors" placeholder="우리 팀을 표현하는 한 문장" required />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">대표자 정보</label>
+                            <input type="text" name="leader_info" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors" placeholder="홍길동 / 기업교육AI스터디 / 010-1234-5678 / hong@example.com" required />
+                        </div>
+                        <div class="space-y-3">
+                            <label class="block text-sm font-medium text-gray-300">팀원 정보 (최소 2인 이상)</label>
+                            <div id="team-members-container" class="space-y-3">
+                                <input type="text" name="member_1" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors" placeholder="팀원 1: 성함 / 소속 / 이메일" required />
+                                <input type="text" name="member_2" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors" placeholder="팀원 2: 성함 / 소속 / 이메일" required />
+                            </div>
+                            <button type="button" onclick="addMember()" class="text-sm text-red-400 hover:text-red-300 flex items-center gap-1 font-medium mt-2">
+                                <i data-lucide="plus" class="w-4 h-4"></i> 팀원 추가하기
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Section 2 -->
+                    <div class="space-y-4">
+                        <h4 class="text-red-500 font-bold border-b border-zinc-800 pb-2">02. 참가 계획 (The Plan)</h4>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">참가 동기 및 팀 결성 배경</label>
+                            <textarea name="motivation" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors h-24 resize-none" placeholder="왜 이 멤버들이 모였나요? 무엇을 얻고 싶으신가요?" required></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">해결하고 싶은 현장의 문제 (Pain Point)</label>
+                            <textarea name="pain_point" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors h-24 resize-none" placeholder="현재 업무나 강의 현장에서 느끼는 가장 큰 비효율은 무엇인가요?" required></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">만들고 싶은 서비스 아이디어</label>
+                            <textarea name="idea" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors h-24 resize-none" placeholder="AI를 활용해 위 문제를 어떻게 해결하고 싶으신가요?" required></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">팀원 R&R (역할 분담)</label>
+                            <textarea name="roles" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors h-20 resize-none" placeholder="예: 홍길동(기획/발표), 김철수(프롬프트 작성), 이영희(디자인/QA)" required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Section 3 -->
+                    <div class="space-y-4">
+                        <h4 class="text-red-500 font-bold border-b border-zinc-800 pb-2">03. 사전 역량 체크</h4>
+                        <p class="text-sm text-gray-400 mb-2">우리 팀의 AI/디지털 활용 능력은?</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-3 p-3 bg-zinc-900/50 rounded-lg cursor-pointer hover:bg-zinc-900 transition-colors">
+                                <input type="radio" name="tech_level" value="1" class="w-4 h-4 text-red-500 accent-red-500" required />
+                                <span class="text-gray-300 text-sm">입문: ChatGPT 가끔 사용</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-zinc-900/50 rounded-lg cursor-pointer hover:bg-zinc-900 transition-colors">
+                                <input type="radio" name="tech_level" value="2" class="w-4 h-4 text-red-500 accent-red-500" required />
+                                <span class="text-gray-300 text-sm">활용: 프롬프트 작성 가능</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-zinc-900/50 rounded-lg cursor-pointer hover:bg-zinc-900 transition-colors">
+                                <input type="radio" name="tech_level" value="3" class="w-4 h-4 text-red-500 accent-red-500" required />
+                                <span class="text-gray-300 text-sm">능숙: API/노코드 툴 경험 있음</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-zinc-900/50 rounded-lg cursor-pointer hover:bg-zinc-900 transition-colors">
+                                <input type="radio" name="tech_level" value="4" class="w-4 h-4 text-red-500 accent-red-500" required />
+                                <span class="text-gray-300 text-sm">개발자 보유: 코딩 가능한 멤버 있음</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Section 4 -->
+                    <div class="space-y-4 bg-zinc-900/30 p-4 rounded-lg border border-zinc-800/50">
+                        <h4 class="text-gray-200 font-bold text-sm">04. 동의 및 제출</h4>
+                        <div class="space-y-3">
+                            <label class="flex items-start gap-3 cursor-pointer">
+                                <input type="checkbox" name="agree_privacy" required class="mt-1 w-4 h-4 accent-red-500" />
+                                <span class="text-gray-400 text-sm leading-snug">[필수] 개인정보 수집 및 이용에 동의합니다.</span>
+                            </label>
+                            <label class="flex items-start gap-3 cursor-pointer">
+                                <input type="checkbox" name="agree_attendance" required class="mt-1 w-4 h-4 accent-red-500" />
+                                <span class="text-gray-400 text-sm leading-snug">[필수] 전 일정(1박 2일) 풀 타임 참여를 서약합니다. (불참 시 수료 불가)</span>
+                            </label>
+                             <label class="flex items-start gap-3 cursor-pointer">
+                                <input type="checkbox" name="agree_policy" required class="mt-1 w-4 h-4 accent-red-500" />
+                                <span class="text-gray-400 text-sm leading-snug">[필수] 결과물 활용 정책(주최측 포트폴리오 등)에 동의합니다.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button id="submit-btn" type="submit" class="w-full bg-gradient-to-r from-red-500 to-[#b91c1c] text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-red-500/20 hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                        신청서 제출하기
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        // Init Icons
+        lucide.createIcons();
+
+        // Header Scroll
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 50) {
+                header.classList.add('bg-[#050505]/90', 'backdrop-blur-md', 'border-b', 'border-white/10');
+                header.classList.remove('py-6', 'bg-transparent');
+                header.classList.add('py-3');
+            } else {
+                header.classList.remove('bg-[#050505]/90', 'backdrop-blur-md', 'border-b', 'border-white/10', 'py-3');
+                header.classList.add('py-6', 'bg-transparent');
+            }
+        });
+
+        // FAQ Toggle
+        function toggleFAQ(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('i');
+            const title = button.querySelector('span');
+
+            const isOpen = content.classList.contains('open');
+
+            // Close all others
+            document.querySelectorAll('.faq-content').forEach(el => {
+                el.classList.remove('open');
+                el.style.maxHeight = '0';
+                el.style.opacity = '0';
+                // Reset styling
+                const btn = el.previousElementSibling;
+                btn.querySelector('span').classList.remove('text-red-500');
+                btn.querySelector('span').classList.add('text-white');
+                btn.querySelector('i').classList.remove('rotate-180', 'text-red-500');
+            });
+
+            if (!isOpen) {
+                content.classList.add('open');
+                content.style.maxHeight = '500px';
+                content.style.opacity = '1';
+                title.classList.remove('text-white');
+                title.classList.add('text-red-500');
+                icon.classList.add('rotate-180', 'text-red-500');
+            }
+        }
+
+        // Modal Logic
+        const modal = document.getElementById('apply-modal');
+        const formContainer = document.getElementById('modal-form-container');
+        const successContainer = document.getElementById('modal-success');
+        const form = document.getElementById('apply-form');
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxA1W1q8o4CZaNfgx87Z6g0LPNFtZJCXHgWl9U9OCppax4d4PZD1S9qSqzvPrl4BpMnZw/exec";
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            // If success state was shown, reset form after closing
+            if (!successContainer.classList.contains('hidden')) {
+                setTimeout(() => {
+                    successContainer.classList.add('hidden');
+                    formContainer.classList.remove('hidden');
+                    form.reset();
+                    // Reset members to 2
+                    const container = document.getElementById('team-members-container');
+                    container.innerHTML = `
+                         <input type="text" name="member_1" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors" placeholder="팀원 1: 성함 / 소속 / 이메일" required />
+                         <input type="text" name="member_2" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors" placeholder="팀원 2: 성함 / 소속 / 이메일" required />
+                    `;
+                }, 300);
+            }
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'unset';
+        }
+
+        // Add Member
+        function addMember() {
+            const container = document.getElementById('team-members-container');
+            const currentCount = container.querySelectorAll('input').length;
+            
+            if (currentCount >= 5) {
+                alert('최대 5명까지만 입력 가능합니다.');
+                return;
+            }
+
+            const newIdx = currentCount + 1;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = `member_${newIdx}`;
+            input.className = "w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors animate-in fade-in zoom-in duration-300";
+            input.placeholder = `팀원 ${newIdx}: 성함 / 소속 / 이메일`;
+            input.required = true;
+            
+            container.appendChild(input);
+        }
+
+        // Form Submit
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            const originalBtnText = btn.innerHTML;
+            
+            // Set Loading State
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> 제출 중...`;
+            lucide.createIcons();
+
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
+
+            try {
+                if (GOOGLE_SCRIPT_URL === "YOUR_GOOGLE_SCRIPT_URL_HERE") {
+                     await new Promise(resolve => setTimeout(resolve, 2000));
+                     console.log("Mock Submit:", data);
+                } else {
+                    await fetch(GOOGLE_SCRIPT_URL, {
+                        method: "POST",
+                        body: JSON.stringify(data),
+                        mode: "no-cors",
+                    });
+                }
+                
+                // Show Success
+                formContainer.classList.add('hidden');
+                successContainer.classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Error", error);
+                alert("제출 중 오류가 발생했습니다.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalBtnText;
+            }
+        });
+    </script>
+</body>
 </html>
