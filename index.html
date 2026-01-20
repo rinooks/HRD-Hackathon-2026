@@ -252,8 +252,8 @@
                 </div>
                 
                 <p class="mt-8 text-sm text-zinc-500 font-mono tracking-wide animate-in fade-in duration-1000 delay-700 flex items-center justify-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    신청 마감: 2026.01.26(월) 까지
+                    <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                    <span class="text-red-500 font-bold">조기 마감되었습니다</span> (감사합니다)
                 </p>
             </div>
             
@@ -947,7 +947,7 @@
         </div>
     </footer>
 
-    <!-- Apply Modal -->
+    <!-- Apply Modal (Original) -->
     <div id="apply-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden">
         <!-- Overlay -->
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
@@ -1095,6 +1095,38 @@
             </div>
         </div>
     </div>
+    
+    <!-- Early Closed Modal (New) -->
+    <div id="early-closed-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden">
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeClosedModal()"></div>
+        
+        <!-- Content -->
+        <div class="relative w-full max-w-md bg-[#111] border border-zinc-800 rounded-2xl shadow-2xl p-8 text-center animate-in fade-in zoom-in-95 duration-200">
+             <button onclick="closeClosedModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors p-1">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            
+            <div class="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-500/20">
+                <i data-lucide="heart" class="w-10 h-10 text-red-500"></i>
+            </div>
+            
+            <h2 class="text-2xl font-bold text-white mb-2">조기 마감 안내</h2>
+            
+            <div class="h-1 w-12 bg-red-600 rounded-full mx-auto mb-6"></div>
+            
+            <p class="text-gray-300 leading-relaxed mb-8 text-lg font-medium">
+                열화와 같은 성원으로<br/>
+                <strong class="text-white">HRD Hackathon 2026</strong>이<br/>
+                <span class="text-red-500 font-bold">조기 마감</span>되었습니다.<br/><br/>
+                성원에 감사드립니다.
+            </p>
+            
+            <button onclick="closeClosedModal()" class="w-full py-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl font-bold transition-all border border-zinc-700 hover:border-zinc-600">
+                확인
+            </button>
+        </div>
+    </div>
 
     <!-- Application Logic -->
     <script>
@@ -1153,14 +1185,23 @@
 
         // Modal Logic
         const modal = document.getElementById('apply-modal');
+        const closedModal = document.getElementById('early-closed-modal');
+        
         const formContainer = document.getElementById('modal-form-container');
         const successContainer = document.getElementById('modal-success');
         const form = document.getElementById('apply-form');
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxA1W1q8o4CZaNfgx87Z6g0LPNFtZJCXHgWl9U9OCppax4d4PZD1S9qSqzvPrl4BpMnZw/exec";
 
         function openModal() {
+            // [Modified] Show Early Closed Modal instead of Apply Modal
+            /*
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+            */
+            closedModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            // Re-init icons for the newly shown modal
+            lucide.createIcons();
         }
 
         function closeModal() {
@@ -1179,6 +1220,11 @@
                 }, 300);
             }
             modal.classList.add('hidden');
+            document.body.style.overflow = 'unset';
+        }
+
+        function closeClosedModal() {
+            closedModal.classList.add('hidden');
             document.body.style.overflow = 'unset';
         }
 
